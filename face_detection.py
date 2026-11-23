@@ -36,6 +36,7 @@ def detect(frame):
     )
     return frame
 
+
 def run_image(path):
     img = cv2.imread(path)
     if img is None:
@@ -47,3 +48,25 @@ def run_image(path):
     cv2.imshow("Face detection", out)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+
+
+def run_webcam():
+    cap = cv2.VideoCapture(0)
+    if not cap.isOpened():
+        sys.exit("Could not open the webcam.")
+    while True:
+        ok, frame = cap.read()
+        if not ok:
+            break
+        cv2.imshow("Face detection (q to quit)", detect(frame))
+        if cv2.waitKey(1) & 0xFF == ord("q"):
+            break
+    cap.release()
+    cv2.destroyAllWindows()
+
+
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        run_image(sys.argv[1])
+    else:
+        run_webcam()
